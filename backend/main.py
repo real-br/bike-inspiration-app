@@ -16,6 +16,9 @@ app = FastAPI()
 
 images_directory = "/Users/freetime/dev/bike_inspiration_app/backend/uploads/"
 
+@app.get("/")
+def hello():
+    return {"Hello": "World!"}
 
 @app.get("/dropdown_data/{file_name}")
 async def get_dropdown_data(file_name: str):

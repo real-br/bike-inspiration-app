@@ -207,7 +207,7 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
                 borderRadius: BorderRadius.circular(10.0),
                 child: Image.file(
                   File(
-                      "/Users/freetime/dev/bike_inspiration_app/backend/uploads/${widget.imagePath}"),
+                      "/Users/freetime/dev/bike_inspiration_app/backend/app/uploads/${widget.imagePath}"),
                   fit: BoxFit.cover,
                 ),
               ),

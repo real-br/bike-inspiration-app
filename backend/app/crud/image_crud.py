@@ -1,12 +1,16 @@
 from sqlalchemy.future import select
-from ..models.bike import Image
+from ..models.bike_db import Image
 from fastapi import UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 
-def create_image(db: AsyncSession, file: UploadFile, file_location: str):
+async def create_image(db: AsyncSession, file: UploadFile, file_location: str):
     new_image = Image(filename=file.filename, filepath=file_location)
+
     db.add(new_image)
+
+    await db.commit()
+    await db.refresh(new_image)
     return new_image
 
 

@@ -1,48 +1,38 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from ..db.session import Base
-from sqlalchemy.orm import relationship
+from pydantic import BaseModel, ConfigDict, Field
+from typing import Optional
 
 
-class Info(Base):
-    __tablename__ = "info"
+class ComponentBase(BaseModel):
+    id: int
+    frame: Optional[str] = Field(None)
+    groupset: Optional[str] = Field(None)
+    wheels: Optional[str] = Field(None)
+    cassette: Optional[str] = Field(None)
+    chain: Optional[str] = Field(None)
+    crank: Optional[str] = Field(None)
+    handlebar: Optional[str] = Field(None)
+    pedals: Optional[str] = Field(None)
+    saddle: Optional[str] = Field(None)
+    stem: Optional[str] = Field(None)
+    tires: Optional[str] = Field(None)
 
-    id = Column(Integer, primary_key=True, index=True)
-    type = Column(String)
-    year = Column(Integer)
-    price_range = Column(String)
-    nr_likes = Column(Integer)
-
-    image_id = Column(Integer, ForeignKey("images.id"), unique=True)
-    components_id = Column(Integer, ForeignKey("components.id"), unique=True)
-
-    image = relationship("Image", back_populates="info", uselist=False)
-    components = relationship("Components", back_populates="info", uselist=False)
-
-
-class Image(Base):
-    __tablename__ = "images"
-
-    id = Column(Integer, primary_key=True, index=True)
-    filename = Column(String, unique=True, nullable=False)
-    filepath = Column(String, nullable=False)
-
-    info = relationship("Info", back_populates="image", uselist=False)
+    model_config = ConfigDict(from_attributes=True)
 
 
-class Components(Base):
-    __tablename__ = "components"
+class ImageBase(BaseModel):
+    id: int
+    filename: str
+    filepath: str
 
-    id = Column(Integer, primary_key=True, index=True)
-    frame = Column(String)
-    groupset = Column(String)
-    wheels = Column(String)
-    cassette = Column(String)
-    chain = Column(String)
-    crank = Column(String)
-    handlebar = Column(String)
-    pedals = Column(String)
-    saddle = Column(String)
-    stem = Column(String)
-    tires = Column(String)
+    model_config = ConfigDict(from_attributes=True)
 
-    info = relationship("Info", back_populates="components", uselist=False)
+
+class AllInfo(BaseModel):
+    id: int
+    type: str
+    year: int
+    price_range: str
+    components: ComponentBase
+    image: ImageBase
+
+    model_config = ConfigDict(from_attributes=True)

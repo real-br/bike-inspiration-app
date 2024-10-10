@@ -1,5 +1,5 @@
 from ..db.session import async_engine, Base
-from ..models import bike
+from ..models import bike_db
 
 
 async def init_db():

@@ -30,6 +30,5 @@ async def upload_image(
     with open(file_location, "wb") as f:
         f.write(await file.read())
 
-    create_image(db, file, file_location)
-    id = await get_image_id(db, file.filename)
-    return {"image_id": id, "filename": file.filename}
+    image = await create_image(db, file, file_location)
+    return {"image_id": image.id, "filename": file.filename}

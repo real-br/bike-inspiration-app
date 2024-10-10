@@ -1,10 +1,13 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.responses import FileResponse
-import csv
+from fastapi.security import OAuth2PasswordBearer
+from typing import Annotated
+from pydantic import BaseModel
 
+import csv
 import os
 
-from sqlite_utils import (
+from backend.app.utils.db_utils import (
     insert_image,
     get_image_id,
     get_all_images_filenames,
@@ -14,11 +17,14 @@ from sqlite_utils import (
 
 app = FastAPI()
 
+
 images_directory = "/Users/freetime/dev/bike_inspiration_app/backend/uploads/"
+
 
 @app.get("/")
 def hello():
     return {"Hello": "World!"}
+
 
 @app.get("/dropdown_data/{file_name}")
 async def get_dropdown_data(file_name: str):

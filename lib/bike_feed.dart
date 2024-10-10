@@ -57,7 +57,7 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
 }
 
 class BikeService {
-  static const String baseUrl = 'http://192.168.1.3:8000';
+  static const String baseUrl = 'http://localhost:8000';
 
   static Future<List<dynamic>> fetchBikeInfo() async {
     final response = await http.get(Uri.parse('$baseUrl/bikesInfo/'));

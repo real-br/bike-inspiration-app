@@ -164,7 +164,7 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.1.3:8000/uploadInfo/'),
+        Uri.parse('http://localhost:8000/uploadInfo/'),
         headers: {"Content-Type": "application/json"},
         body: jsonData,
       );

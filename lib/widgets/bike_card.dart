@@ -42,7 +42,7 @@ class BikeCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Image.network(
-                "http://192.168.1.3:8000/image/${bikeInfo["filename"]}",
+                "http://localhost:8000/image/${bikeInfo["filename"]}",
                 errorBuilder: (context, error, stackTrace) {
                   return Text('Image not available');
                 },

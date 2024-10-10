@@ -28,7 +28,7 @@ class _UploadImageScreenState extends State<UploadImageScreen> {
   Future<void> _uploadImage(File imageFile) async {
     try {
       final request = http.MultipartRequest(
-          'POST', Uri.parse('http://192.168.1.3:8000/upload/'));
+          'POST', Uri.parse('http://localhost:8000/upload/'));
 
       request.files.add(
         await http.MultipartFile.fromPath(

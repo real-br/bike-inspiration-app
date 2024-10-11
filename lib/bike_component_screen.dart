@@ -1,8 +1,7 @@
 import 'package:bike_inspiration_app/widgets/dropdown_search.dart';
 import 'package:bike_inspiration_app/widgets/custom_text_field.dart';
-import 'package:bike_inspiration_app/my_flutter_app_icons.dart';
 import 'package:bike_inspiration_app/widgets/clickable_list_dialog_button.dart';
-
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -10,9 +9,8 @@ import 'dart:convert';
 
 class BikeComponentScreen extends StatefulWidget {
   final String imagePath;
-  final int imageId;
 
-  BikeComponentScreen({required this.imagePath, required this.imageId});
+  BikeComponentScreen({required this.imagePath});
 
   @override
   _BikeComponentScreenState createState() => _BikeComponentScreenState();
@@ -97,20 +95,6 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
     "wheels": "Wheels Name"
   };
 
-  final Map<String, IconData> customIconsMap = {
-    "cassette": CustomIcons.chain,
-    "chain": CustomIcons.chain,
-    "crank": CustomIcons.chain,
-    "frame": CustomIcons.chain,
-    "groupset": CustomIcons.chain,
-    "handlebar": CustomIcons.chain,
-    "pedals": CustomIcons.chain,
-    "saddle": CustomIcons.chain,
-    "stem": CustomIcons.chain,
-    "tires": CustomIcons.chain,
-    "wheels": CustomIcons.chain
-  };
-
   @override
   void initState() {
     super.initState();
@@ -140,14 +124,16 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
   }
 
   Future<void> _uploadBikeInfo() async {
-    final Map<String, dynamic> data = {};
+    final String bikeId = Uuid().v4(); // Generate a unique ID for the bike info
 
-    data["id"] = widget.imageId;
-    data["type"] = _selectedBikeType;
-    data["year"] = _yearController.text;
-    data["pricerange"] = _selectedPriceRange;
-
-    data["inputfields"] = _inputFields;
+    final Map<String, dynamic> data = {
+      "id": bikeId, // Include the unique ID
+      "type": _selectedBikeType,
+      "year": _yearController.text,
+      "pricerange": _selectedPriceRange,
+      "inputfields": _inputFields,
+      "image_filename": widget.imagePath,
+    };
 
     for (String field in _inputFields) {
       String? dropdownValue = _selectedDropdownValues[field];
@@ -206,8 +192,7 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
                 child: Image.file(
-                  File(
-                      "/Users/freetime/dev/bike_inspiration_app/backend/app/uploads/${widget.imagePath}"),
+                  File(widget.imagePath),
                   fit: BoxFit.cover,
                 ),
               ),

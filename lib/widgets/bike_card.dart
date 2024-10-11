@@ -25,7 +25,7 @@ class BikeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  bikeInfo["components"]["frame"] ?? "No Frame Info",
+                  bikeInfo["frame"] ?? "No Frame Info",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -43,8 +43,7 @@ class BikeCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Image.file(
-                File(
-                    "/Users/freetime/dev/bike_inspiration_app/backend/app/uploads/${bikeInfo["image"]["filename"]}"),
+                File(bikeInfo["image_filename"]),
                 errorBuilder: (context, error, stackTrace) {
                   return Text('Image not available');
                 },
@@ -89,20 +88,18 @@ class BikeCard extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Text("${bikeInfo["components"]["groupset"] ?? 'N/A'}",
-                      maxLines: 2),
+                  child: Text("${bikeInfo["groupset"] ?? 'N/A'}", maxLines: 2),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   flex: 1,
-                  child: Text("${bikeInfo["components"]["wheels"] ?? 'N/A'}",
-                      maxLines: 2),
+                  child: Text("${bikeInfo["wheels"] ?? 'N/A'}", maxLines: 2),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   flex: 1,
                   child: Text(
-                    "${bikeInfo["components"]["pricerange"] ?? 'N/A'}",
+                    "${bikeInfo["pricerange"] ?? 'N/A'}",
                     maxLines: 2,
                   ),
                 ),
@@ -123,26 +120,22 @@ class BikeCard extends StatelessWidget {
                         ListTile(
                           leading: Icon(CustomIcons.cassette),
                           title: Text("Cassette"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["cassette"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["cassette"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.chain),
                           title: Text("Chain"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["chain"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["chain"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.crank),
                           title: Text("Crank"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["crank"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["crank"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.handlebar),
                           title: Text("Handlebar"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["handlebar"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["handlebar"] ?? 'N/A'}"),
                         ),
                       ],
                     ),
@@ -154,26 +147,22 @@ class BikeCard extends StatelessWidget {
                         ListTile(
                           leading: Icon(CustomIcons.pedal),
                           title: Text("Pedals"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["pedals"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["pedals"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.seat),
                           title: Text("Saddle"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["saddle"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["saddle"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.stem),
                           title: Text("Stem"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["stem"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["stem"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.car),
                           title: Text("Tires"),
-                          subtitle: Text(
-                              "${bikeInfo["components"]["tires"] ?? 'N/A'}"),
+                          subtitle: Text("${bikeInfo["tires"] ?? 'N/A'}"),
                         ),
                       ],
                     ),

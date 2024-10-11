@@ -15,5 +15,5 @@ async def get_bikes(db: AsyncSession = Depends(get_db)):
 
 @router.post("/uploadInfo/")
 async def upload_info(info: dict, db: AsyncSession = Depends(get_db)):
-    info, components = await insert_bike_info(db=db, bike_info=info)
+    info = await insert_bike_info(db=db, bike_info=info)
     return {"message": "Info uploaded successfully"}

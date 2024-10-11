@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'upload_image_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'bike_feed.dart';
+import 'login_screen.dart';
 
 Future<void> main() async {
   runApp(MyApp());
@@ -15,7 +16,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green)),
-      home: MyHomePage(),
+      home: InitialScreen(),
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => MyHomePage(),
+      },
     );
   }
 }
@@ -33,8 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return BikeFeedScreen();
       case 1:
-        return UploadImageScreen();
-      case 2:
         return Placeholder();
       default:
         return Center(child: Text('Page not found'));
@@ -64,13 +67,48 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             NavigationDestination(
               icon: Icon(
-                Icons.add,
+                Icons.push_pin,
               ),
-              label: 'Upload',
+              label: 'Saved',
             ),
           ],
           backgroundColor: Colors.white,
         ),
+      ),
+    );
+  }
+}
+
+class InitialScreen extends StatefulWidget {
+  @override
+  _InitialScreenState createState() => _InitialScreenState();
+}
+
+class _InitialScreenState extends State<InitialScreen> {
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    if (token != null) {
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: _isLoading ? CircularProgressIndicator() : Container(),
       ),
     );
   }

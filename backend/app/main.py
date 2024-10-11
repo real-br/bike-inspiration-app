@@ -2,7 +2,7 @@ from collections.abc import AsyncGenerator
 from typing import Any
 
 from fastapi import FastAPI
-from .routes import images, bikes, dropdown_data
+from .routes import bikes, dropdown_data, auth_routes
 from contextlib import asynccontextmanager
 from .db import init_db
 import uvicorn
@@ -16,9 +16,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, None]:
 
 app = FastAPI(lifespan=lifespan)
 
-app.include_router(images.router)
 app.include_router(bikes.router)
 app.include_router(dropdown_data.router)
+app.include_router(auth_routes.router, prefix="/auth")
 
 
 @app.get("/")

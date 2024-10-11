@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:bike_inspiration_app/widgets/bike_card.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'bike_component_screen.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class BikeFeedScreen extends StatefulWidget {
   @override
@@ -12,6 +15,8 @@ class BikeFeedScreen extends StatefulWidget {
 class _BikeFeedScreenState extends State<BikeFeedScreen> {
   List<dynamic> _info = [];
   bool _isLoading = true;
+  File? _image;
+  final picker = ImagePicker();
 
   @override
   void initState() {
@@ -34,6 +39,23 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
     }
   }
 
+  Future<void> _pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BikeComponentScreen(
+              imagePath: _image!.path,
+            ),
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +74,13 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
                     return BikeCard(bikeInfo: _info[index]);
                   },
                 ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _pickImage();
+        },
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

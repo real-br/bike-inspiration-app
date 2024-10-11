@@ -2,8 +2,11 @@ from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
 
-class ComponentBase(BaseModel):
-    id: int
+class BikeBase(BaseModel):
+    id: str
+    type: str
+    year: int
+    price_range: str
     frame: Optional[str] = Field(None)
     groupset: Optional[str] = Field(None)
     wheels: Optional[str] = Field(None)
@@ -15,24 +18,6 @@ class ComponentBase(BaseModel):
     saddle: Optional[str] = Field(None)
     stem: Optional[str] = Field(None)
     tires: Optional[str] = Field(None)
-
-    model_config = ConfigDict(from_attributes=True)
-
-
-class ImageBase(BaseModel):
-    id: int
-    filename: str
-    filepath: str
-
-    model_config = ConfigDict(from_attributes=True)
-
-
-class AllInfo(BaseModel):
-    id: int
-    type: str
-    year: int
-    price_range: str
-    components: ComponentBase
-    image: ImageBase
+    image_filename: str
 
     model_config = ConfigDict(from_attributes=True)

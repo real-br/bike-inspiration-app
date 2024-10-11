@@ -5,3 +5,6 @@ sqlalchemy
 aiosqlite
 greenlet
 aiofiles
+python-jose 
+passlib
+bcrypt

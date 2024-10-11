@@ -35,6 +35,8 @@ dependencies:
   image_picker: ^1.1.2
   like_button: ^2.0.5
   dropdown_search: ^6.0.1
+  uuid: ^4.5.1
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:

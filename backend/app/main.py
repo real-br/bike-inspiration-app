@@ -2,9 +2,9 @@ from collections.abc import AsyncGenerator
 from typing import Any
 
 from fastapi import FastAPI
-from .routes import bikes, dropdown_data, auth_routes
+from app.routes import bikes, dropdown_data, auth_routes
 from contextlib import asynccontextmanager
-from .db import init_db
+from app.db import init_db
 import uvicorn
 
 

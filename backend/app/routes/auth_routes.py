@@ -3,10 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
-from ..db.session import get_db
-from ..models.user_db import User
-from ..models.user import RegisterUser
-from ..auth import verify_password, get_password_hash, create_access_token
+from app.db.session import get_db
+from app.models.user_db import User
+from app.models.user import RegisterUser
+from app.auth import verify_password, get_password_hash, create_access_token
 
 from dotenv import load_dotenv
 import os

@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..models.bike_db import BikeInfo
-from ..models.bike import BikeBase
+from app.models.bike_db import BikeInfo
+from app.models.bike import BikeBase
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 

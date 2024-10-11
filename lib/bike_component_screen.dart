@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BikeComponentScreen extends StatefulWidget {
   final String imagePath;
@@ -124,7 +125,9 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
   }
 
   Future<void> _uploadBikeInfo() async {
-    final String bikeId = Uuid().v4(); // Generate a unique ID for the bike info
+    final String bikeId = Uuid().v4();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
     final Map<String, dynamic> data = {
       "id": bikeId, // Include the unique ID
@@ -151,7 +154,10 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:8000/uploadInfo/'),
-        headers: {"Content-Type": "application/json"},
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
         body: jsonData,
       );
 

@@ -55,8 +55,6 @@ async def login_for_access_token(
 ):
     user = await db.execute(select(User).filter(User.username == form_data.username))
     result = user.scalars().one_or_none()
-
-    breakpoint()
     if not result:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

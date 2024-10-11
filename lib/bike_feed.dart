@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'bike_component_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BikeFeedScreen extends StatefulWidget {
   @override
@@ -56,12 +57,26 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
     });
   }
 
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token'); // Remove the JWT token from storage
+
+    // Navigate to the login screen
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title:
             Text("Ride Inspired", style: TextStyle(fontFamily: "BlippoBlack")),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: _logout,
+          ),
+        ],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -89,7 +104,15 @@ class BikeService {
   static const String baseUrl = 'http://localhost:8000';
 
   static Future<List<dynamic>> fetchBikeInfo() async {
-    final response = await http.get(Uri.parse('$baseUrl/bikesInfo/'));
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/bikesInfo/'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
       return json.decode(response.body);

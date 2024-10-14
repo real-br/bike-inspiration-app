@@ -1,14 +1,14 @@
-from sqlalchemy import Column, Integer, String, Boolean
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy import Column, String, Boolean
+from sqlalchemy.orm import relationship
 from app.db.session import Base
 
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(String, primary_key=True, index=True)
     username = Column(
         String,
+        primary_key=True,
         unique=True,
     )
     first_name = Column(String, nullable=False)
@@ -16,3 +16,5 @@ class User(Base):
     email = Column(String, unique=True, nullable=True)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
+
+    saved_posts = relationship("SavedPosts", back_populates="user")

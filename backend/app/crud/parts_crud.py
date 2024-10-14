@@ -12,7 +12,7 @@ async def insert_bike_info(db: AsyncSession, bike_info: dict):
         type=bike_info["type"],
         year=bike_info["year"],
         price_range=bike_info["pricerange"],
-        image_filename=bike_info["image_filename"],
+        image_url=bike_info["image_url"],
     )
 
     for field in bike_info["inputfields"]:
@@ -29,10 +29,11 @@ async def insert_bike_info(db: AsyncSession, bike_info: dict):
 
 async def get_bikes_info(db: AsyncSession):
 
-    stmt = select(BikeInfo)
+    stmt = select(BikeInfo).options(selectinload(BikeInfo.saved_posts))
 
     result = await db.execute(stmt)
 
     bikes_info = result.scalars().all()
+    breakpoint()
 
     return [BikeBase.model_validate(info) for info in bikes_info]

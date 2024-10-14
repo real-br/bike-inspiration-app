@@ -18,6 +18,6 @@ class BikeBase(BaseModel):
     saddle: Optional[str] = Field(None)
     stem: Optional[str] = Field(None)
     tires: Optional[str] = Field(None)
-    image_filename: str
+    image_url: str
 
     model_config = ConfigDict(from_attributes=True)

@@ -6,7 +6,12 @@ from jose import jwt, JWTError
 from app.db.session import get_db
 from app.models.user_db import User
 from app.models.user import RegisterUser
-from app.auth import verify_password, get_password_hash, create_access_token
+from app.auth import (
+    _verify_password,
+    _get_password_hash,
+    _create_access_token,
+    _verify_token,
+)
 
 from dotenv import load_dotenv
 import os
@@ -31,9 +36,8 @@ async def register_user(
     result = user.scalars().one_or_none()
     if result:
         raise HTTPException(status_code=400, detail="Email already registered")
-    hashed_password = get_password_hash(register_user.password)
+    hashed_password = _get_password_hash(register_user.password)
     new_user = User(
-        id=register_user.id,
         first_name=register_user.first_name,
         last_name=register_user.last_name,
         username=register_user.username,
@@ -43,9 +47,8 @@ async def register_user(
     )
     db.add(new_user)
     await db.commit()
-    await db.refresh()
 
-    access_token = create_access_token(data={"sub": result.username})
+    access_token = _create_access_token(data={"sub": register_user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
 
@@ -62,34 +65,20 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    elif not verify_password(form_data.password, result.hashed_password):
+    elif not _verify_password(form_data.password, result.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    access_token = create_access_token(data={"sub": result.username})
+    access_token = _create_access_token(data={"sub": result.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.get("/users/me")
-async def read_users_me(
+@router.post("/validate-token")
+async def verify_token(
     token: str = Depends(oauth2_scheme), db: AsyncSession = Depends(get_db)
 ):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
-            raise credentials_exception
-    except JWTError:
-        raise credentials_exception
-    user = await db.execute(select(User).filter(User.username == username))
-    if user is None:
-        raise credentials_exception
-    return user
+    username = _verify_token(token)
+    return {"valid": True, "username": username}

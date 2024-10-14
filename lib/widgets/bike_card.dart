@@ -1,13 +1,20 @@
-// bike_card.dart
-import 'package:bike_inspiration_app/my_flutter_app_icons.dart';
+import 'package:bike_inspiration_app/widgets/my_flutter_app_icons.dart';
+import 'package:bike_inspiration_app/widgets/save_post.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
 import 'dart:io';
 
-class BikeCard extends StatelessWidget {
-  final Map<String, dynamic> bikeInfo;
+import 'get_user_id.dart';
 
-  const BikeCard({super.key, required this.bikeInfo});
+class BikeCard extends StatefulWidget {
+  final Map<String, dynamic> bikeInfo;
+  BikeCard({required this.bikeInfo});
+  @override
+  _BikeCardState createState() => _BikeCardState();
+}
+
+class _BikeCardState extends State<BikeCard> {
+  bool _isSaved = false;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +32,14 @@ class BikeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  bikeInfo["frame"] ?? "No Frame Info",
+                  widget.bikeInfo["frame"] ?? "No Frame Info",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: Colors.green),
                 ),
                 Text(
-                  bikeInfo["type"]?.toUpperCase() ?? "Unknown",
+                  widget.bikeInfo["type"]?.toUpperCase() ?? "Unknown",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
@@ -42,12 +49,7 @@ class BikeCard extends StatelessWidget {
             padding: const EdgeInsets.only(left: 12.0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image.file(
-                File(bikeInfo["image_filename"]),
-                errorBuilder: (context, error, stackTrace) {
-                  return Text('Image not available');
-                },
-              ),
+              child: Image.network(widget.bikeInfo["image_url"]),
             ),
           ),
           Padding(
@@ -88,18 +90,20 @@ class BikeCard extends StatelessWidget {
               children: [
                 Expanded(
                   flex: 1,
-                  child: Text("${bikeInfo["groupset"] ?? 'N/A'}", maxLines: 2),
+                  child: Text("${widget.bikeInfo["groupset"] ?? 'N/A'}",
+                      maxLines: 2),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   flex: 1,
-                  child: Text("${bikeInfo["wheels"] ?? 'N/A'}", maxLines: 2),
+                  child: Text("${widget.bikeInfo["wheels"] ?? 'N/A'}",
+                      maxLines: 2),
                 ),
                 SizedBox(width: 10),
                 Expanded(
                   flex: 1,
                   child: Text(
-                    "${bikeInfo["pricerange"] ?? 'N/A'}",
+                    "${widget.bikeInfo["price_range"] ?? 'N/A'}",
                     maxLines: 2,
                   ),
                 ),
@@ -120,22 +124,26 @@ class BikeCard extends StatelessWidget {
                         ListTile(
                           leading: Icon(CustomIcons.cassette),
                           title: Text("Cassette"),
-                          subtitle: Text("${bikeInfo["cassette"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["cassette"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.chain),
                           title: Text("Chain"),
-                          subtitle: Text("${bikeInfo["chain"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["chain"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.crank),
                           title: Text("Crank"),
-                          subtitle: Text("${bikeInfo["crank"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["crank"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.handlebar),
                           title: Text("Handlebar"),
-                          subtitle: Text("${bikeInfo["handlebar"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["handlebar"] ?? 'N/A'}"),
                         ),
                       ],
                     ),
@@ -147,22 +155,25 @@ class BikeCard extends StatelessWidget {
                         ListTile(
                           leading: Icon(CustomIcons.pedal),
                           title: Text("Pedals"),
-                          subtitle: Text("${bikeInfo["pedals"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["pedals"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.seat),
                           title: Text("Saddle"),
-                          subtitle: Text("${bikeInfo["saddle"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["saddle"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.stem),
                           title: Text("Stem"),
-                          subtitle: Text("${bikeInfo["stem"] ?? 'N/A'}"),
+                          subtitle: Text("${widget.bikeInfo["stem"] ?? 'N/A'}"),
                         ),
                         ListTile(
                           leading: Icon(CustomIcons.car),
                           title: Text("Tires"),
-                          subtitle: Text("${bikeInfo["tires"] ?? 'N/A'}"),
+                          subtitle:
+                              Text("${widget.bikeInfo["tires"] ?? 'N/A'}"),
                         ),
                       ],
                     ),
@@ -179,6 +190,26 @@ class BikeCard extends StatelessWidget {
                 child: LikeButton(
                   animationDuration: Duration(seconds: 0),
                   likeCount: 665,
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: IconButton(
+                  icon: Icon(Icons.push_pin,
+                      color: _isSaved ? Colors.green : Colors.grey),
+                  onPressed: () async {
+                    setState(() {
+                      _isSaved = !_isSaved;
+                    });
+                    final userInfo = await getUserId();
+                    final userName = userInfo['userName'];
+                    final token = userInfo['token'];
+                    if (_isSaved) {
+                      savePost(widget.bikeInfo["id"], userName!, token!);
+                    } else {
+                      unsavePost(widget.bikeInfo["id"], userName!, token!);
+                    }
+                  },
                 ),
               ),
               Expanded(

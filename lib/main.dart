@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'package:bike_inspiration_app/widgets/initial_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'bike_feed.dart';
-import 'login_screen.dart';
+import 'widgets/bike_feed.dart';
+import 'widgets/login_screen.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 
@@ -39,6 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
         return BikeFeedScreen();
       case 1:
         return Placeholder();
+      case 2:
+        return Placeholder();
       default:
         return Center(child: Text('Page not found'));
     }
@@ -54,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 top: BorderSide(
                     color: Theme.of(context).colorScheme.primary, width: 1.0))),
         child: NavigationBar(
+          height: 70,
           selectedIndex: selectedIndex,
           onDestinationSelected: (int index) {
             setState(() {
@@ -71,44 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               label: 'Saved',
             ),
+            NavigationDestination(
+              icon: Icon(
+                Icons.person_2,
+              ),
+              label: 'Account',
+            ),
           ],
           backgroundColor: Colors.white,
         ),
-      ),
-    );
-  }
-}
-
-class InitialScreen extends StatefulWidget {
-  @override
-  _InitialScreenState createState() => _InitialScreenState();
-}
-
-class _InitialScreenState extends State<InitialScreen> {
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-
-    if (token != null) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      Navigator.pushReplacementNamed(context, '/login');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _isLoading ? CircularProgressIndicator() : Container(),
       ),
     );
   }

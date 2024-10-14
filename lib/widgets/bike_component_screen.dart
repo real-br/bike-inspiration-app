@@ -7,6 +7,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'upload_image.dart';
 
 class BikeComponentScreen extends StatefulWidget {
   final String imagePath;
@@ -36,7 +37,6 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
 
   final Map<String, TextEditingController> _controllers = {};
 
-  // Track selected dropdown values
   final Map<String, String> _selectedDropdownValues = {};
 
   final List<String> _bikeTypes = [
@@ -129,13 +129,30 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token');
 
+    String imageUrl;
+    try {
+      File image = File(widget.imagePath);
+      if (image != null) {
+        imageUrl = await uploadImageToImgur(image);
+      } else {
+        throw Exception('No image selected');
+      }
+    } catch (e) {
+      if (!mounted) return;
+      print('Error uploading image: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading image')),
+      );
+      return;
+    }
+
     final Map<String, dynamic> data = {
-      "id": bikeId, // Include the unique ID
+      "id": bikeId,
       "type": _selectedBikeType,
       "year": _yearController.text,
       "pricerange": _selectedPriceRange,
       "inputfields": _inputFields,
-      "image_filename": widget.imagePath,
+      "image_url": imageUrl,
     };
 
     for (String field in _inputFields) {

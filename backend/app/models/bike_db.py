@@ -21,4 +21,5 @@ class BikeInfo(Base):
     saddle = Column(String)
     stem = Column(String)
     tires = Column(String)
-    image_filename = Column(String)
+    image_url = Column(String)
+    saved_posts = relationship("SavedPosts", back_populates="post_info")

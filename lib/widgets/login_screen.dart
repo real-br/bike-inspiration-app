@@ -1,8 +1,8 @@
 import 'dart:convert';
+import 'package:bike_inspiration_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'bike_feed.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -45,11 +45,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', token);
+      await prefs.setString('username', _username);
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BikeFeedScreen(),
+          builder: (context) => MyHomePage(),
         ),
       );
     } else {

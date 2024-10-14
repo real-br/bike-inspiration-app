@@ -1,9 +1,8 @@
+import "package:bike_inspiration_app/main.dart";
 import "package:flutter/material.dart";
 import "package:http/http.dart" as http;
-import "bike_feed.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "dart:convert";
-import 'package:uuid/uuid.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -12,7 +11,6 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  final String userId = Uuid().v4();
   String _username = "";
   String _email = "";
   TextEditingController _passwordController = TextEditingController();
@@ -34,7 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     final url = Uri.parse("http://localhost:8000/auth/register");
     final Map<String, String> data = {
-      "id": userId,
       "username": _username,
       "first_name": _firstName,
       "last_name": _lastName,
@@ -50,11 +47,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("token", token);
+      await prefs.setString('username', _username);
 
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BikeFeedScreen(),
+          builder: (context) => MyHomePage(),
         ),
       );
     } else {

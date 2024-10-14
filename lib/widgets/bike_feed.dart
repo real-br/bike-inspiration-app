@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bike_inspiration_app/widgets/bike_card.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'widgets/bike_component_screen.dart';
+import 'bike_component_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';

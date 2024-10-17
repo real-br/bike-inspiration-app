@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.activity import SavedPost
 from app.models.activity_db import SavedPosts
-from app.models.bike import BikeBase
+from app.models.bike import SavedBike
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 from datetime import datetime
@@ -12,7 +12,7 @@ async def save_post(db: AsyncSession, save_info: SavedPost):
     saved_post = SavedPosts(
         post_id=save_info.post_id,
         user_name=save_info.user_name,
-        saved_at=datetime.strptime(save_info.saved_at, "%Y-%m-%d %H:%M:%S.%f"),
+        saved_at=save_info.saved_at,
     )
 
     db.add(saved_post)
@@ -28,7 +28,7 @@ async def unsave_post(db: AsyncSession, save_info: SavedPost):
     result = await db.execute(
         select(SavedPosts).filter_by(
             post_id=save_info.post_id,
-            user_id=save_info.user_name,
+            user_name=save_info.user_name,
         )
     )
 
@@ -50,6 +50,4 @@ async def get_saved_posts(db: AsyncSession, user_id: str):
 
     saved_posts = result.scalars().all()
 
-    breakpoint()
-
-    return [BikeBase.model_validate(post) for post in saved_posts]
+    return [SavedBike.model_validate(post.post_info) for post in saved_posts]

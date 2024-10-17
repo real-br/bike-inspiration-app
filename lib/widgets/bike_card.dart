@@ -2,8 +2,6 @@ import 'package:bike_inspiration_app/widgets/my_flutter_app_icons.dart';
 import 'package:bike_inspiration_app/widgets/save_post.dart';
 import 'package:flutter/material.dart';
 import 'package:like_button/like_button.dart';
-import 'dart:io';
-
 import 'get_user_id.dart';
 
 class BikeCard extends StatefulWidget {
@@ -15,6 +13,36 @@ class BikeCard extends StatefulWidget {
 
 class _BikeCardState extends State<BikeCard> {
   bool _isSaved = false;
+  String? userName;
+  String? token;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeUserAndSavedStatus();
+  }
+
+  Future<void> _initializeUserAndSavedStatus() async {
+    final userInfo = await getUserId();
+    userName = userInfo['userName'];
+    token = userInfo['token'];
+
+    setState(() {
+      _isSaved = checkSaved(widget.bikeInfo, userName!);
+    });
+  }
+
+  bool checkSaved(Map<String, dynamic> bikeInfo, String userName) {
+    if (bikeInfo.containsKey("saved_posts") &&
+        bikeInfo["saved_posts"] is List) {
+      for (var savedPost in bikeInfo["saved_posts"]) {
+        if (savedPost['user_name'] == userName) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +229,6 @@ class _BikeCardState extends State<BikeCard> {
                     setState(() {
                       _isSaved = !_isSaved;
                     });
-                    final userInfo = await getUserId();
-                    final userName = userInfo['userName'];
-                    final token = userInfo['token'];
                     if (_isSaved) {
                       savePost(widget.bikeInfo["id"], userName!, token!);
                     } else {

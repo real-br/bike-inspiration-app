@@ -20,8 +20,7 @@ Future<String> savePost(String postId, String userId, String token) async {
   );
 
   if (response.statusCode == 200) {
-    final message = json.decode(response.body);
-    return message;
+    return "Great";
   } else {
     throw Exception('Failed to load bike info');
   }
@@ -29,21 +28,24 @@ Future<String> savePost(String postId, String userId, String token) async {
 
 Future<String> unsavePost(String postId, String userId, String token) async {
   final Map<String, dynamic> data = {
-    "user_id": userId,
+    "user_name": userId,
     "post_id": postId,
-    "saved_at": DateTime.now()
+    "saved_at": null,
   };
+
+  final String jsonData = json.encode(data);
 
   final response = await http.post(
     Uri.parse('http://localhost:8000/unsavePost/'),
     headers: {
       'Authorization': 'Bearer $token',
+      "Content-Type": "application/json",
     },
-    body: data,
+    body: jsonData,
   );
 
   if (response.statusCode == 200) {
-    return json.decode(response.body);
+    return "Great";
   } else {
     throw Exception('Failed to load bike info');
   }

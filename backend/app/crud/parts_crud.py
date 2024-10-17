@@ -34,6 +34,5 @@ async def get_bikes_info(db: AsyncSession):
     result = await db.execute(stmt)
 
     bikes_info = result.scalars().all()
-    breakpoint()
 
     return [BikeBase.model_validate(info) for info in bikes_info]

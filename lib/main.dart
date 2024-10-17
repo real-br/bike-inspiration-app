@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bike_inspiration_app/widgets/initial_screen.dart';
+import 'package:bike_inspiration_app/widgets/saved_posts_screen.dart';
 import 'package:flutter/material.dart';
 import 'widgets/bike_feed.dart';
 import 'widgets/login_screen.dart';
@@ -39,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       case 0:
         return BikeFeedScreen();
       case 1:
-        return Placeholder();
+        return SavedPostsScreen();
       case 2:
         return Placeholder();
       default:

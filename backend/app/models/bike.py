@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from app.models.activity import SavedPost
+from ..models.activity import SavedPost
 from typing import List
 
 

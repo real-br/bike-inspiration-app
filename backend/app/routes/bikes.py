@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from app.crud.parts_crud import get_bikes_info, insert_bike_info
-from app.db.session import get_db
-from app.routes.protect import TokenData, get_current_user
+from ..crud.parts_crud import get_bikes_info, insert_bike_info
+from ..db.session import get_db
+from .protect import TokenData, get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

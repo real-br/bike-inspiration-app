@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
-from app.crud.activity_crud import save_post, unsave_post, get_saved_posts
-from app.db.session import get_db
-from app.routes.protect import TokenData, get_current_user
+from ..crud.activity_crud import save_post, unsave_post, get_saved_posts
+from ..db.session import get_db
+from ..routes.protect import TokenData, get_current_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.activity import SavedPost
 

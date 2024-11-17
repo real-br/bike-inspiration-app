@@ -1,7 +1,7 @@
 import 'package:bike_inspiration_app/widgets/my_flutter_app_icons.dart';
 import 'package:bike_inspiration_app/widgets/save_post.dart';
+import 'package:bike_inspiration_app/widgets/like_post.dart';
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
 import 'get_user_id.dart';
 
 class BikeCard extends StatefulWidget {
@@ -13,22 +13,27 @@ class BikeCard extends StatefulWidget {
 
 class _BikeCardState extends State<BikeCard> {
   bool _isSaved = false;
+  bool _isLiked = false;
   String? userName;
   String? token;
+  int? _nrLikes = 0;
 
   @override
   void initState() {
     super.initState();
-    _initializeUserAndSavedStatus();
+    _initializeUserAndSavedAndLikedStatus();
   }
 
-  Future<void> _initializeUserAndSavedStatus() async {
+  Future<void> _initializeUserAndSavedAndLikedStatus() async {
     final userInfo = await getUserId();
     userName = userInfo['userName'];
     token = userInfo['token'];
+    final nrLikes = await getNrLikes(widget.bikeInfo["id"], token!);
 
     setState(() {
       _isSaved = checkSaved(widget.bikeInfo, userName!);
+      _isLiked = checkLiked(widget.bikeInfo, userName!);
+      _nrLikes = nrLikes;
     });
   }
 
@@ -37,6 +42,19 @@ class _BikeCardState extends State<BikeCard> {
         bikeInfo["saved_posts"] is List) {
       for (var savedPost in bikeInfo["saved_posts"]) {
         if (savedPost['user_name'] == userName) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  bool checkLiked(Map<String, dynamic> bikeInfo, String userName) {
+    print(bikeInfo);
+    if (bikeInfo.containsKey("liked_posts") &&
+        bikeInfo["liked_posts"] is List) {
+      for (var likedPost in bikeInfo["liked_posts"]) {
+        if (likedPost['user_name'] == userName) {
           return true;
         }
       }
@@ -80,6 +98,7 @@ class _BikeCardState extends State<BikeCard> {
               child: Image.network(widget.bikeInfo["image_url"]),
             ),
           ),
+          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.only(left: 12.0),
             child: Row(
@@ -102,7 +121,7 @@ class _BikeCardState extends State<BikeCard> {
                 ),
                 SizedBox(width: 10),
                 Expanded(
-                  flex: 1, // you can play with this value, by default it is 1
+                  flex: 1,
                   child: Text(
                     "Price-Range",
                     style: TextStyle(fontWeight: FontWeight.bold),
@@ -212,12 +231,35 @@ class _BikeCardState extends State<BikeCard> {
           ),
           Divider(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Expanded(
                 flex: 1,
-                child: LikeButton(
-                  animationDuration: Duration(seconds: 0),
-                  likeCount: 665,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: _isLiked
+                          ? Icon(Icons.favorite, color: Colors.red)
+                          : Icon(
+                              Icons.favorite_border,
+                              color: Colors.grey,
+                            ),
+                      onPressed: () async {
+                        setState(() {
+                          _isLiked = !_isLiked;
+                        });
+                        if (_isLiked) {
+                          likePost(widget.bikeInfo["id"], userName!, token!);
+                          _nrLikes = (_nrLikes ?? 0) + 1;
+                        } else {
+                          unlikePost(widget.bikeInfo["id"], userName!, token!);
+                          _nrLikes = (_nrLikes ?? 0) - 1;
+                        }
+                      },
+                    ),
+                    Text(_nrLikes.toString()),
+                  ],
                 ),
               ),
               Expanded(

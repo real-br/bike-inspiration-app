@@ -49,6 +49,7 @@ class _SavedBikeCardState extends State<SavedBikeCard> {
                     child: Image.network(widget.bikeInfo["image_url"]),
                   ),
                 ),
+                SizedBox(width: 10),
                 Expanded(
                   flex: 2,
                   child: Column(

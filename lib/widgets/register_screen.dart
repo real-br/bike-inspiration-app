@@ -30,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _isLoading = true;
     });
 
-    final url = Uri.parse("http://localhost:8000/auth/register");
+    final url = Uri.parse("http://10.0.2.2:8000/auth/register");
     final Map<String, String> data = {
       "username": _username,
       "first_name": _firstName,
@@ -49,7 +49,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       await prefs.setString("token", token);
       await prefs.setString('username', _username);
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => MyHomePage(),
@@ -70,6 +70,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text("Register"),
       ),

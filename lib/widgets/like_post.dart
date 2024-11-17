@@ -1,17 +1,17 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<String> savePost(String postId, String userId, String token) async {
+Future<String> likePost(String postId, String userId, String token) async {
   final Map<String, dynamic> data = {
     "user_name": userId,
     "post_id": postId,
-    "saved_at": DateTime.now().toString()
+    "liked_at": DateTime.now().toString()
   };
 
   final String jsonData = json.encode(data);
 
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/savePost/'),
+    Uri.parse('http://10.0.2.2:8000/likePost/'),
     headers: {
       'Authorization': 'Bearer $token',
       "Content-Type": "application/json",
@@ -26,17 +26,17 @@ Future<String> savePost(String postId, String userId, String token) async {
   }
 }
 
-Future<String> unsavePost(String postId, String userId, String token) async {
+Future<String> unlikePost(String postId, String userId, String token) async {
   final Map<String, dynamic> data = {
     "user_name": userId,
     "post_id": postId,
-    "saved_at": null,
+    "liked_at": null,
   };
 
   final String jsonData = json.encode(data);
 
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/unsavePost/'),
+    Uri.parse('http://10.0.2.2:8000/unlikePost/'),
     headers: {
       'Authorization': 'Bearer $token',
       "Content-Type": "application/json",
@@ -51,16 +51,16 @@ Future<String> unsavePost(String postId, String userId, String token) async {
   }
 }
 
-Future<String> getSavedPosts(String userId, String token) async {
+Future<int> getNrLikes(String postId, String token) async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:8000/savedPosts/$userId'),
+    Uri.parse('http://10.0.2.2:8000/likedPosts/$postId'),
     headers: {
       'Authorization': 'Bearer $token',
     },
   );
 
   if (response.statusCode == 200) {
-    return json.decode(response.body);
+    return json.decode(response.body) ?? 0;
   } else {
     throw Exception('Failed to load bike info');
   }

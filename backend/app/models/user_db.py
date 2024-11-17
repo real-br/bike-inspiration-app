@@ -18,3 +18,4 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     saved_posts = relationship("SavedPosts", back_populates="user")
+    liked_posts = relationship("LikedPosts", back_populates="user")

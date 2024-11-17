@@ -66,6 +66,7 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int crossAxisCount = MediaQuery.of(context).size.width ~/ 250;
     return Scaffold(
       appBar: AppBar(
         title:
@@ -100,7 +101,7 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
 }
 
 class BikeService {
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = 'http://10.0.2.2:8000';
 
   static Future<List<dynamic>> fetchBikeInfo() async {
     final prefs = await SharedPreferences.getInstance();

@@ -1,10 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..models.activity import SavedPost
-from ..models.activity_db import SavedPosts
+from ..models.activity import SavedPost, LikedPost
+from ..models.activity_db import SavedPosts, LikedPosts
 from ..models.bike import SavedBike
 from sqlalchemy.future import select
+from sqlalchemy import func
 from sqlalchemy.orm import selectinload
-from datetime import datetime
 
 
 async def save_post(db: AsyncSession, save_info: SavedPost):
@@ -51,3 +51,48 @@ async def get_saved_posts(db: AsyncSession, user_id: str):
     saved_posts = result.scalars().all()
 
     return [SavedBike.model_validate(post.post_info) for post in saved_posts]
+
+
+async def like_post(db: AsyncSession, like_info: LikedPost):
+
+    liked_post = LikedPosts(
+        post_id=like_info.post_id,
+        user_name=like_info.user_name,
+        liked_at=like_info.liked_at,
+    )
+
+    db.add(liked_post)
+
+    await db.commit()
+    await db.refresh(liked_post)
+
+    return liked_post
+
+
+async def unlike_post(db: AsyncSession, like_info: LikedPost):
+
+    result = await db.execute(
+        select(LikedPosts).filter_by(
+            post_id=like_info.post_id,
+            user_name=like_info.user_name,
+        )
+    )
+
+    unliked_post = result.scalar_one_or_none()
+
+    await db.delete(unliked_post)
+    await db.commit()
+
+    return {"message": "Post unliked successfully"}
+
+
+async def get_nr_likes(db: AsyncSession, post_id: str):
+
+    stmt = (
+        select(func.count(LikedPosts.post_id))
+        .where(LikedPosts.post_id == post_id)
+        .group_by(LikedPosts.post_id)
+    )
+    result = await db.execute(stmt)
+    nr_likes = result.scalar()
+    return nr_likes

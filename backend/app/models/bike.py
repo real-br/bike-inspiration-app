@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
-from ..models.activity import SavedPost
+from ..models.activity import SavedPost, LikedPost
 from typing import List
 
 
@@ -22,6 +22,7 @@ class BikeBase(BaseModel):
     tires: Optional[str] = Field(None)
     image_url: str
     saved_posts: Optional[List[SavedPost]]
+    liked_posts: Optional[List[LikedPost]]
 
     model_config = ConfigDict(from_attributes=True)
 

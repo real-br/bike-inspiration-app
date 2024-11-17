@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    final url = Uri.parse('http://localhost:8000/auth/token');
+    final url = Uri.parse('http://10.0.2.2:8000/auth/token');
 
     final response = await http.post(
       url,
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setString('token', token);
       await prefs.setString('username', _username);
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => MyHomePage(),
@@ -68,61 +68,68 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _username = value!;
-                },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("""Ride Inspired""",
+                style: TextStyle(fontFamily: "BlippoBlack", fontSize: 36)),
+            SizedBox(
+              height: 50,
+            ),
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Username'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _username = value!;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Password'),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your password';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _password = value!;
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  _isLoading
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: _login,
+                          child: Text('Login'),
+                        ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterScreen(),
+                        ),
+                      );
+                    },
+                    child: Text('Don\'t have an account? Register here'),
+                  ),
+                ],
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _password = value!;
-                },
-              ),
-              SizedBox(height: 20),
-              _isLoading
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: _login,
-                      child: Text('Login'),
-                    ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegisterScreen(),
-                    ),
-                  );
-                },
-                child: Text('Don\'t have an account? Register here'),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

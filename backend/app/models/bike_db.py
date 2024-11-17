@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from ..db.session import Base
+from .user import RegisterUser
 from sqlalchemy.orm import relationship
 
 
@@ -23,3 +24,5 @@ class BikeInfo(Base):
     tires = Column(String)
     image_url = Column(String)
     saved_posts = relationship("SavedPosts", back_populates="post_info")
+    liked_posts = relationship("LikedPosts", back_populates="post_info")
+    created_by = Column(User)

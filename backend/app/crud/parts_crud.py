@@ -29,7 +29,9 @@ async def insert_bike_info(db: AsyncSession, bike_info: dict):
 
 async def get_bikes_info(db: AsyncSession):
 
-    stmt = select(BikeInfo).options(selectinload(BikeInfo.saved_posts))
+    stmt = select(BikeInfo).options(
+        selectinload(BikeInfo.saved_posts), selectinload(BikeInfo.liked_posts)
+    )
 
     result = await db.execute(stmt)
 

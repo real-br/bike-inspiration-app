@@ -59,7 +59,7 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
 }
 
 class SavedPostsService {
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = 'http://10.0.2.2:8000';
 
   static Future<List<dynamic>> fetchSavedPosts() async {
     final prefs = await SharedPreferences.getInstance();

@@ -25,4 +25,5 @@ class BikeInfo(Base):
     image_url = Column(String)
     saved_posts = relationship("SavedPosts", back_populates="post_info")
     liked_posts = relationship("LikedPosts", back_populates="post_info")
-    created_by = Column(User)
+    created_by = Column(String, ForeignKey("users.username"))
+    creator = relationship("User", back_populates="created_posts")

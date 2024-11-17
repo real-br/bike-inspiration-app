@@ -19,3 +19,4 @@ class User(Base):
 
     saved_posts = relationship("SavedPosts", back_populates="user")
     liked_posts = relationship("LikedPosts", back_populates="user")
+    created_posts = relationship("BikeInfo", back_populates="creator")

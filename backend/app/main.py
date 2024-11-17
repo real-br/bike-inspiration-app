@@ -2,7 +2,7 @@ from collections.abc import AsyncGenerator
 from typing import Any
 
 from fastapi import FastAPI
-from .routes import bikes, dropdown_data, auth_routes, activity
+from .routes import bikes, dropdown_data, auth_routes, activity, account
 from contextlib import asynccontextmanager
 from .db import init_db
 import uvicorn
@@ -20,6 +20,7 @@ app.include_router(bikes.router)
 app.include_router(dropdown_data.router)
 app.include_router(auth_routes.router, prefix="/auth")
 app.include_router(activity.router)
+app.include_router(account.router)
 
 
 @app.get("/")

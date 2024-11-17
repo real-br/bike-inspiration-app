@@ -13,6 +13,7 @@ async def insert_bike_info(db: AsyncSession, bike_info: dict):
         year=bike_info["year"],
         price_range=bike_info["pricerange"],
         image_url=bike_info["image_url"],
+        created_by=bike_info["created_by"],
     )
 
     for field in bike_info["inputfields"]:

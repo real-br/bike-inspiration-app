@@ -57,13 +57,6 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
     });
   }
 
-  Future<void> _logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
-
-    Navigator.pushReplacementNamed(context, '/login');
-  }
-
   @override
   Widget build(BuildContext context) {
     int crossAxisCount = MediaQuery.of(context).size.width ~/ 250;
@@ -71,12 +64,6 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
       appBar: AppBar(
         title:
             Text("Ride Inspired", style: TextStyle(fontFamily: "BlippoBlack")),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: _logout,
-          ),
-        ],
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())

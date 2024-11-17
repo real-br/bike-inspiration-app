@@ -153,6 +153,7 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
       "pricerange": _selectedPriceRange,
       "inputfields": _inputFields,
       "image_url": imageUrl,
+      "created_by": prefs.getString("username")
     };
 
     for (String field in _inputFields) {

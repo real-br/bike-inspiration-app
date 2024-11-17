@@ -71,6 +71,7 @@ class _BikeCardState extends State<BikeCard> {
       ),
       elevation: 9,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -92,7 +93,7 @@ class _BikeCardState extends State<BikeCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Image.network(widget.bikeInfo["image_url"]),

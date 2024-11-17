@@ -23,6 +23,7 @@ class BikeBase(BaseModel):
     image_url: str
     saved_posts: Optional[List[SavedPost]]
     liked_posts: Optional[List[LikedPost]]
+    created_by: str
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -44,4 +45,5 @@ class SavedBike(BaseModel):
     stem: Optional[str] = Field(None)
     tires: Optional[str] = Field(None)
     image_url: str
+    created_by: str
     model_config = ConfigDict(from_attributes=True)

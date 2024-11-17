@@ -88,7 +88,7 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
 }
 
 class BikeService {
-  static const String baseUrl = 'http://10.0.2.2:8000';
+  static const String baseUrl = 'https://newbikeday.ddns.net';
 
   static Future<List<dynamic>> fetchBikeInfo() async {
     final prefs = await SharedPreferences.getInstance();

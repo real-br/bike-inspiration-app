@@ -53,7 +53,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final token = prefs.getString('token');
 
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/deleteAccount/$username'),
+      Uri.parse('https://newbikeday.ddns.net/deleteAccount/$username'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -103,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class UserService {
-  static const String baseUrl = 'http://10.0.2.2:8000';
+  static const String baseUrl = 'https://newbikeday.ddns.net';
 
   static Future<Map<String, dynamic>> fetchUserProfile() async {
     final prefs = await SharedPreferences.getInstance();

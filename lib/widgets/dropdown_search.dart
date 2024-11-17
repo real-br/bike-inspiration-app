@@ -6,7 +6,7 @@ import 'dart:convert';
 
 Future<List<String>> fetchDropdownData(String fileName) async {
   final response = await http
-      .get(Uri.parse('http://10.0.2.2:8000/dropdown_data/$fileName'));
+      .get(Uri.parse('https://newbikeday.ddns.net/dropdown_data/$fileName'));
 
   if (response.statusCode == 200) {
     List<dynamic> data = json.decode(response.body);

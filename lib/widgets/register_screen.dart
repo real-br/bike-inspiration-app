@@ -30,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       _isLoading = true;
     });
 
-    final url = Uri.parse("http://10.0.2.2:8000/auth/register");
+    final url = Uri.parse("https://newbikeday.ddns.net/auth/register");
     final Map<String, String> data = {
       "username": _username,
       "first_name": _firstName,

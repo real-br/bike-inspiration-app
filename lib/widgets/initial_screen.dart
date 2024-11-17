@@ -43,7 +43,7 @@ class _InitialScreenState extends State<InitialScreen> {
 
   Future<bool> _validateToken(String token) async {
     try {
-      final url = Uri.parse('http://10.0.2.2:8000/auth/validate-token');
+      final url = Uri.parse('https://newbikeday.ddns.net/auth/validate-token');
 
       final response = await http.post(
         url,

@@ -171,7 +171,7 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:8000/uploadInfo/'),
+        Uri.parse('https://newbikeday.ddns.net/uploadInfo/'),
         headers: {
           "Content-Type": "application/json",
           'Authorization': 'Bearer $token',

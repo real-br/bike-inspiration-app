@@ -11,7 +11,7 @@ Future<String> likePost(String postId, String userId, String token) async {
   final String jsonData = json.encode(data);
 
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/likePost/'),
+    Uri.parse('https://newbikeday.ddns.net/likePost/'),
     headers: {
       'Authorization': 'Bearer $token',
       "Content-Type": "application/json",
@@ -36,7 +36,7 @@ Future<String> unlikePost(String postId, String userId, String token) async {
   final String jsonData = json.encode(data);
 
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/unlikePost/'),
+    Uri.parse('https://newbikeday.ddns.net/unlikePost/'),
     headers: {
       'Authorization': 'Bearer $token',
       "Content-Type": "application/json",
@@ -53,7 +53,7 @@ Future<String> unlikePost(String postId, String userId, String token) async {
 
 Future<int> getNrLikes(String postId, String token) async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:8000/likedPosts/$postId'),
+    Uri.parse('https://newbikeday.ddns.net/likedPosts/$postId'),
     headers: {
       'Authorization': 'Bearer $token',
     },

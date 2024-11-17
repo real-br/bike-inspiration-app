@@ -11,7 +11,7 @@ Future<String> savePost(String postId, String userId, String token) async {
   final String jsonData = json.encode(data);
 
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/savePost/'),
+    Uri.parse('https://newbikeday.ddns.net/savePost/'),
     headers: {
       'Authorization': 'Bearer $token',
       "Content-Type": "application/json",
@@ -36,7 +36,7 @@ Future<String> unsavePost(String postId, String userId, String token) async {
   final String jsonData = json.encode(data);
 
   final response = await http.post(
-    Uri.parse('http://10.0.2.2:8000/unsavePost/'),
+    Uri.parse('https://newbikeday.ddns.net/unsavePost/'),
     headers: {
       'Authorization': 'Bearer $token',
       "Content-Type": "application/json",
@@ -53,7 +53,7 @@ Future<String> unsavePost(String postId, String userId, String token) async {
 
 Future<String> getSavedPosts(String userId, String token) async {
   final response = await http.get(
-    Uri.parse('http://10.0.2.2:8000/savedPosts/$userId'),
+    Uri.parse('https://newbikeday.ddns.net/savedPosts/$userId'),
     headers: {
       'Authorization': 'Bearer $token',
     },

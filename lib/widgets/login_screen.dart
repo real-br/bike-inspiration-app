@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
       _isLoading = true;
     });
 
-    final url = Uri.parse('http://10.0.2.2:8000/auth/token');
+    final url = Uri.parse('https://newbikeday.ddns.net/auth/token');
 
     final response = await http.post(
       url,

@@ -8,7 +8,7 @@
 PRODUCT_NAME = bike_inspiration_app
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.bikeInspirationApp
+PRODUCT_BUNDLE_IDENTIFIER = com.oasis.bikeInspirationApp
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2024 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.oasis. All rights reserved.

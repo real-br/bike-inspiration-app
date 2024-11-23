@@ -1,4 +1,4 @@
-package com.example.bike_inspiration_app
+package com.oasis.bike_inspiration_app
 
 import io.flutter.embedding.android.FlutterActivity
 

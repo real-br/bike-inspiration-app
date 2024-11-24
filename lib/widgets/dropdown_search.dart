@@ -9,8 +9,9 @@ Future<List<String>> fetchDropdownData(String fileName) async {
       .get(Uri.parse('https://newbikeday.ddns.net/dropdown_data/$fileName'));
 
   if (response.statusCode == 200) {
-    List<dynamic> data = json.decode(response.body);
-    return data.map((item) => item['name'].toString()).toList();
+    final data = utf8.decode(response.bodyBytes);
+    List<dynamic> jsonData = json.decode(data);
+    return jsonData.map((item) => item['name'].toString()).toList();
   } else {
     throw Exception('Failed to load data');
   }

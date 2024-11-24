@@ -206,131 +206,146 @@ class _BikeComponentScreenState extends State<BikeComponentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add a new bike'),
+        title: const Text('Create a post'),
       ),
+      resizeToAvoidBottomInset: true, // Ensures resizing
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: Image.file(
-                  File(widget.imagePath),
-                  fit: BoxFit.cover,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              controller: _scrollController,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
                 ),
-              ),
-              SizedBox(height: 30),
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Form(
-                    key: _formKey,
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            labelText: "Bike Type",
-                            border: OutlineInputBorder(),
-                            labelStyle: TextStyle(fontSize: 15),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(10.0),
+                          child: Image.file(
+                            File(widget.imagePath),
+                            fit: BoxFit.cover,
                           ),
-                          value: _selectedBikeType,
-                          items: _bikeTypes.map((String bikeType) {
-                            return DropdownMenuItem<String>(
-                              value: bikeType,
-                              child: Text(bikeType.toString().toUpperCase()),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedBikeType = newValue;
-                            });
-                          },
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        DropdownButtonFormField<String>(
-                          decoration: InputDecoration(
-                            labelText: "Price Range",
-                            labelStyle: TextStyle(fontSize: 15),
-                            border: OutlineInputBorder(),
-                          ),
-                          value: _selectedPriceRange,
-                          items: _priceRanges.map((String priceRange) {
-                            return DropdownMenuItem<String>(
-                              value: priceRange,
-                              child: Text(priceRange.toString().toUpperCase()),
-                            );
-                          }).toList(),
-                          onChanged: (newValue) {
-                            setState(() {
-                              _selectedPriceRange = newValue;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: "Year",
-                            hintStyle: TextStyle(fontSize: 15),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter the year';
-                            } else if (int.parse(value) < 1980 ||
-                                int.parse(value) > DateTime.now().year) {
-                              return 'Input a realistic year';
-                            }
-                            return null;
-                          },
-                          controller: _yearController,
-                        ),
-                        SizedBox(height: 10),
-                        for (var field in _inputFields) buildRowForField(field),
-                        Row(children: [
-                          _availableComponents.isNotEmpty
-                              ? ClickableListDialog(
-                                  items: _availableComponents
-                                      .toSet()
-                                      .difference(_inputFields.toSet())
-                                      .toList(),
-                                  onItemSelected: (value) {
+                        SizedBox(height: 35),
+                        Expanded(
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    labelText: "Bike Type",
+                                    border: OutlineInputBorder(),
+                                    labelStyle: TextStyle(fontSize: 15),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 12, vertical: 16),
+                                  ),
+                                  value: _selectedBikeType,
+                                  items: _bikeTypes.map((String bikeType) {
+                                    return DropdownMenuItem<String>(
+                                      value: bikeType,
+                                      child: Text(
+                                          bikeType.toString().toUpperCase()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newValue) {
                                     setState(() {
-                                      _inputFields.add(value);
-                                      _availableComponents.remove(value);
-                                      _controllers[value] =
-                                          TextEditingController();
-                                      _selectedDropdownValues[value] = '';
-                                      _scrollController.animateTo(
-                                        _scrollController
-                                            .position.maxScrollExtent,
-                                        duration: Duration(milliseconds: 300),
-                                        curve: Curves.easeOut,
-                                      );
+                                      _selectedBikeType = newValue;
                                     });
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      _scrollController.animateTo(
-                                        _scrollController
-                                            .position.maxScrollExtent,
-                                        duration: Duration(milliseconds: 300),
-                                        curve: Curves.easeOut,
-                                      );
+                                  },
+                                ),
+                                SizedBox(height: 10),
+                                DropdownButtonFormField<String>(
+                                  decoration: InputDecoration(
+                                    labelText: "Price Range",
+                                    labelStyle: TextStyle(fontSize: 15),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  value: _selectedPriceRange,
+                                  items: _priceRanges.map((String priceRange) {
+                                    return DropdownMenuItem<String>(
+                                      value: priceRange,
+                                      child: Text(
+                                          priceRange.toString().toUpperCase()),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      _selectedPriceRange = newValue;
                                     });
-                                  })
-                              : Container(),
-                        ]),
+                                  },
+                                ),
+                                SizedBox(height: 10),
+                                TextFormField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    hintText: "Year",
+                                    hintStyle: TextStyle(fontSize: 15),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter the year';
+                                    } else if (int.parse(value) < 1980 ||
+                                        int.parse(value) >
+                                            DateTime.now().year) {
+                                      return 'Input a realistic year';
+                                    }
+                                    return null;
+                                  },
+                                  controller: _yearController,
+                                ),
+                                SizedBox(height: 10),
+                                for (var field in _inputFields)
+                                  buildRowForField(field),
+                                Row(
+                                  children: [
+                                    _availableComponents.isNotEmpty
+                                        ? ClickableListDialog(
+                                            items: _availableComponents
+                                                .toSet()
+                                                .difference(
+                                                    _inputFields.toSet())
+                                                .toList(),
+                                            onItemSelected: (value) {
+                                              setState(() {
+                                                _inputFields.add(value);
+                                                _availableComponents
+                                                    .remove(value);
+                                                _controllers[value] =
+                                                    TextEditingController();
+                                                _selectedDropdownValues[value] =
+                                                    '';
+                                              });
+                                              WidgetsBinding.instance
+                                                  .addPostFrameCallback((_) {
+                                                _scrollController.animateTo(
+                                                  _scrollController
+                                                      .position.maxScrollExtent,
+                                                  duration: Duration(
+                                                      milliseconds: 300),
+                                                  curve: Curves.easeOut,
+                                                );
+                                              });
+                                            })
+                                        : Container(),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

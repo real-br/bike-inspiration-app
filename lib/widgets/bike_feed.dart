@@ -29,14 +29,11 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
     try {
       final fetchedInfo = await BikeService.fetchBikeInfo();
       setState(() {
-        _info = fetchedInfo;
+        _info = fetchedInfo.reversed.toList();
         _isLoading = false;
       });
     } catch (e) {
       print('Error fetching bike info: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load info')),
-      );
     }
   }
 
@@ -67,15 +64,18 @@ class _BikeFeedScreenState extends State<BikeFeedScreen> {
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
-          : _info.isEmpty
-              ? Center(child: Text('No bikes available'))
-              : ListView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  itemCount: _info.length,
-                  itemBuilder: (context, index) {
-                    return BikeCard(bikeInfo: _info[index]);
-                  },
-                ),
+          : RefreshIndicator(
+              onRefresh: _fetchInfo,
+              child: _info.isEmpty
+                  ? Center(child: Text('No bikes available'))
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(8.0),
+                      itemCount: _info.length,
+                      itemBuilder: (context, index) {
+                        return BikeCard(bikeInfo: _info[index]);
+                      },
+                    ),
+            ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {

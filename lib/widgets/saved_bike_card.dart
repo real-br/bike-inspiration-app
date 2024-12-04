@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:bike_inspiration_app/widgets/my_flutter_app_icons.dart';
 import 'get_user_id.dart';
 import 'package:bike_inspiration_app/widgets/save_post.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SavedBikeCard extends StatefulWidget {
   final Map<String, dynamic> bikeInfo;
-  SavedBikeCard({required this.bikeInfo});
+  final VoidCallback onDelete;
+  SavedBikeCard({required this.bikeInfo, required this.onDelete});
   @override
   _SavedBikeCardState createState() => _SavedBikeCardState();
 }
@@ -46,7 +50,15 @@ class _SavedBikeCardState extends State<SavedBikeCard> {
                   flex: 3,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(widget.bikeInfo["image_url"]),
+                    child: AspectRatio(
+                      aspectRatio:
+                          16 / 9, // Or set dynamically based on your needs
+                      child: Image.network(
+                        widget.bikeInfo["image_url"],
+                        fit: BoxFit
+                            .contain, // Adjusts image to fit fully without cropping
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(width: 10),
@@ -95,6 +107,7 @@ class _SavedBikeCardState extends State<SavedBikeCard> {
                       onPressed: () {
                         unsavePost(widget.bikeInfo["id"], userName!, token!);
                         widget.bikeInfo.clear();
+                        widget.onDelete();
                       } // Trigger the delete callback
                       ),
                 ),

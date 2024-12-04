@@ -1,7 +1,6 @@
 // bike_feed_screen.dart
 import 'package:bike_inspiration_app/widgets/saved_bike_card.dart';
 import 'package:flutter/material.dart';
-import 'package:bike_inspiration_app/widgets/bike_card.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,15 +23,16 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
   Future<void> _fetchSavedPosts() async {
     try {
       final fetchedInfo = await SavedPostsService.fetchSavedPosts();
-      setState(() {
-        _info = fetchedInfo;
-        _isLoading = false;
-      });
+
+      // Compare new data to avoid unnecessary rebuilds
+      if (mounted) {
+        setState(() {
+          _info = fetchedInfo;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
       print('Error fetching bike info: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load info')),
-      );
     }
   }
 
@@ -51,7 +51,13 @@ class _SavedPostsScreenState extends State<SavedPostsScreen> {
                   padding: const EdgeInsets.all(8.0),
                   itemCount: _info.length,
                   itemBuilder: (context, index) {
-                    return SavedBikeCard(bikeInfo: _info[index]);
+                    print(_info[index]['id']?.toString());
+                    return SavedBikeCard(
+                      bikeInfo: _info[index],
+                      onDelete: () async {
+                        await _fetchSavedPosts(); // Refresh the posts after unsaving
+                      },
+                    );
                   },
                 ),
     );

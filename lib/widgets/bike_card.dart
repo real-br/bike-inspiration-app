@@ -93,12 +93,18 @@ class _BikeCardState extends State<BikeCard> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
-              child: Image.network(widget.bikeInfo["image_url"]),
-            ),
-          ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9, // Adjust the aspect ratio as needed
+                  child: Image.network(
+                    widget.bikeInfo["image_url"],
+                    fit: BoxFit
+                        .contain, // Ensures the image scales and crops appropriately
+                  ),
+                ),
+              )),
           SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.only(left: 12.0),

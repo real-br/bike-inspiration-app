@@ -8,4 +8,4 @@ aiofiles
 python-jose 
 passlib
 bcrypt
-
+inference-sdk==0.41.0

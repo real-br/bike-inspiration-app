@@ -46,7 +46,7 @@ async def detect_bike(
             image.save(temp_file.name, format="JPEG")
 
             # Run inference using Roboflow
-            result = CLIENT.infer(temp_file.name, model_id="bicycle-3ln52/1")
+            result = CLIENT.infer(temp_file.name, model_id="bicycle-detection-lshuz/2")
 
             # Check if any bikes were detected
             has_bike = len(result.get("predictions", [])) > 0
